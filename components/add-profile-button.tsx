@@ -63,8 +63,7 @@ const AddProfileButton = ({ projectId }: AddProfileButtonProps) => {
           <DialogHeader>
             <DialogTitle>Add Profile</DialogTitle>
             <DialogDescription>
-              Fill in the details below to add a new profile. Click save when
-              you're done.
+              Fill in the details below to add a new profile.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">

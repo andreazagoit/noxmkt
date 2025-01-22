@@ -76,7 +76,6 @@ const deleteSchema = z.object({
 
 export async function DELETE(req: Request) {
   await connectDB();
-  const session = await auth();
 
   try {
     const body = await req.json();

@@ -1,12 +1,11 @@
 import EmailComposer from "@/components/email-composer";
 import React from "react";
 
-type RootLayoutProps = {
-  children: React.ReactNode;
+type ComposerPageProps = {
   params: Promise<{ projectId: string }>;
 };
 
-const ComposerPage = async ({ params }: RootLayoutProps) => {
+const ComposerPage = async ({ params }: ComposerPageProps) => {
   const projectId = (await params).projectId;
 
   return (

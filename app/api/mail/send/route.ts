@@ -1,5 +1,3 @@
-import ContactModel from "@/models/Contact";
-import ProjectModel from "@/models/Project";
 import { sendEmail } from "@/utils/email";
 import { getDataFromReq } from "@/utils/jwt";
 
