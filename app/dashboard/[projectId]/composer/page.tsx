@@ -1,3 +1,4 @@
+import DndProviderWrapper from "@/components/DndProvider";
 import EmailComposer from "@/components/email-composer";
 import React from "react";
 
@@ -10,7 +11,10 @@ const ComposerPage = async ({ params }: ComposerPageProps) => {
 
   return (
     <div className="flex flex-col h-screen">
-      <EmailComposer projectId={projectId} />
+      {/* <EmailComposer projectId={projectId} /> */}
+      <DndProviderWrapper>
+        <EmailComposer projectId={projectId} />
+      </DndProviderWrapper>
     </div>
   );
 };

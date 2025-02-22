@@ -20,31 +20,36 @@ type AddContactButtonProps = {
 };
 
 const AddContactButton = ({ projectId }: AddContactButtonProps) => {
-  const [name, setName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [tags, setTags] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-  const [errors, setErrors] = useState();
+  const [errors, setErrors] = useState<any>();
 
   const router = useRouter();
 
   const handleAddContact = async () => {
     try {
+      // Split tags into an array
       const tagList = tags.split(",").map((tag) => tag.trim());
+
+      // Call the addContact function
       const newContact = await addContact(projectId, {
-        name,
+        firstName,
+        lastName,
         email,
         phone,
-        tags: tagList,
+        tags: [],
       });
 
-      console.log("aaaa");
+      // Refresh the page and close the dialog
       router.refresh();
       setIsOpen(false);
       toast(`Added new contact: ${newContact.email}`);
     } catch (error: any) {
-      console.error("erroreee", error);
+      console.error("Error adding contact:", error);
       setErrors(error);
     }
   };
@@ -60,13 +65,19 @@ const AddContactButton = ({ projectId }: AddContactButtonProps) => {
           <DialogDescription>
             Fill in the details below to add a new contact to the project.
           </DialogDescription>
-          <p>{JSON.stringify(errors)}</p>
+          {/* Display error messages if any */}
+          {errors && <p className="text-red-500">{errors.message}</p>}
         </DialogHeader>
         <div className="space-y-4">
           <Input
-            placeholder="Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            placeholder="First Name"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+          />
+          <Input
+            placeholder="Last Name"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
           />
           <Input
             placeholder="Email"

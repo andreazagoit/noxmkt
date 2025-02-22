@@ -22,10 +22,7 @@ const AudiencePage = async ({ params }: AudiencePageProps) => {
 
   return (
     <Container>
-      <div className="py-4 flex flex-wrap gap-4 justify-between">
-        <Link href="/projects">
-          <Button variant={"outline"}>Go back</Button>
-        </Link>
+      <div className="py-4 flex flex-wrap gap-4 justify-end">
         <div className="flex gap-4">
           <TestEmailButton token={project.token} />
           <AddContactButton projectId={project._id} />

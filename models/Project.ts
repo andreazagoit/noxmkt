@@ -19,6 +19,12 @@ const projectSchema = new mongoose.Schema({
       ref: "Contact",
     },
   ],
+  tags: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Tag",
+    },
+  ],
   profiles: [
     {
       type: mongoose.Schema.Types.ObjectId,

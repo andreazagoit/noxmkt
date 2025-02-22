@@ -61,7 +61,7 @@ export function AppSidebar({ projectId }: AppSidebarProps) {
     <Sidebar>
       <SidebarHeader>
         <div className="h-12 flex items-center">
-          <h3 className="font-bold text-2xl">EMMKT</h3>
+          <h3 className="font-bold text-2xl">NOXMKT</h3>
         </div>
       </SidebarHeader>
       <SidebarContent>

@@ -18,7 +18,6 @@ export const addProfile = async (
   projectId: string,
   { email, host, port, password, secure }: any
 ) => {
-  console.log("aaa");
   await connectDB();
   const foundProject = await ProjectModel.findById(projectId);
 
