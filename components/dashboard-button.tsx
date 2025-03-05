@@ -8,8 +8,6 @@ import { signIn } from "next-auth/react";
 const DashboardButton = () => {
   const { data: session } = useSession();
 
-  console.log("dash user", session);
-
   return (
     <button
       className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-6 rounded shadow transition"
