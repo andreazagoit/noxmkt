@@ -13,12 +13,6 @@ const projectSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  contacts: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Contact",
-    },
-  ],
   tags: [
     {
       type: mongoose.Schema.Types.ObjectId,

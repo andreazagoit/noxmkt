@@ -49,7 +49,7 @@ const DraggableSidebarBlock = ({ block }) => {
 
   return (
     <div
-      ref={ref}
+      ref={ref as any}
       style={{
         padding: "8px",
         margin: "4px 0",
@@ -76,7 +76,7 @@ const Composer = () => {
 
   const [, drop] = useDrop({
     accept: ItemTypes.BLOCK,
-    hover: (item) => {
+    hover: (item: any) => {
       const draggedIndex = item.index;
       if (draggedIndex !== hoverIndex) {
         setHoverIndex(draggedIndex);
@@ -93,7 +93,7 @@ const Composer = () => {
 
   return (
     <div
-      ref={drop}
+      ref={drop as any}
       style={{
         padding: "16px",
         flex: 1,
@@ -123,7 +123,7 @@ const DraggableBlock = ({ block, index, moveBlock }) => {
 
   const [, drop] = useDrop({
     accept: ItemTypes.BLOCK,
-    hover: (item) => {
+    hover: (item: any) => {
       if (item.index !== index) {
         moveBlock(item.index, index);
         item.index = index;
@@ -133,7 +133,7 @@ const DraggableBlock = ({ block, index, moveBlock }) => {
 
   return (
     <div
-      ref={(node) => ref(drop(node))}
+      ref={(node) => ref(drop(node)) as any}
       style={{
         padding: "8px",
         margin: "4px 0",

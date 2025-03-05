@@ -10,8 +10,11 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react";
+import { Calendar, Home, Inbox, Search, Settings, Cog } from "lucide-react";
 import Link from "next/link";
+import { FaArrowLeft } from "react-icons/fa6";
+
+import { Button } from "./ui/button";
 
 type AppSidebarProps = {
   projectId: string;
@@ -32,6 +35,11 @@ export function AppSidebar({ projectId }: AppSidebarProps) {
           title: "Campaigns",
           url: `${baseUrl}/campaigns`,
           icon: Inbox,
+        },
+        {
+          title: "Automations",
+          url: `${baseUrl}/automations`,
+          icon: Cog,
         },
         {
           title: "Audience",
@@ -61,7 +69,7 @@ export function AppSidebar({ projectId }: AppSidebarProps) {
     <Sidebar>
       <SidebarHeader>
         <div className="h-12 flex items-center">
-          <h3 className="font-bold text-2xl">NOXMKT</h3>
+          <h3 className="font-bold text-2xl uppercase">NoxisFlow</h3>
         </div>
       </SidebarHeader>
       <SidebarContent>
@@ -85,7 +93,14 @@ export function AppSidebar({ projectId }: AppSidebarProps) {
           </SidebarGroup>
         ))}
       </SidebarContent>
-      <SidebarFooter />
+      <SidebarFooter className="p-4">
+        <Link href="/dashboard">
+          <Button className="w-full bg-inherit" variant="outline">
+            <FaArrowLeft />
+            Seleziona progetto
+          </Button>
+        </Link>
+      </SidebarFooter>
     </Sidebar>
   );
 }

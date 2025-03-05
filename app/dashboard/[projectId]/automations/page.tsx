@@ -61,6 +61,7 @@ const CampaignsPage = async ({ params }) => {
   const { projectId } = await params;
 
   const campaigns = await getCampaigns(projectId);
+  console.log(campaigns);
 
   /* const [campaigns, setCampaigns] = useState<Campaign[]>([
     {
@@ -197,7 +198,7 @@ const CampaignsPage = async ({ params }) => {
         </div>
         <h2 className="text-4xl sm:text-6xl font-semibold mb-8">Campaigns</h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
           {campaigns.map((campaign) => (
             <Link key={campaign._id} href={`campaigns/${campaign._id}`}>
               <Card className="p-4 shadow-lg rounded-lg">
@@ -214,7 +215,7 @@ const CampaignsPage = async ({ params }) => {
           ))}
         </div>
 
-        {/* <h2 className="text-4xl sm:text-6xl font-semibold mb-8">Automations</h2> */}
+        <h2 className="text-4xl sm:text-6xl font-semibold mb-8">Automations</h2>
 
         {/* <button
           onClick={handleCreateAutomation}

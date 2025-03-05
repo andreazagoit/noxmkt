@@ -1,6 +1,11 @@
-import { signOut } from "@/auth";
+"use client";
+import { signOut as authSignOut } from "next-auth/react";
 
 export function SignOut() {
+  return <button onClick={() => authSignOut()}>Sign Out</button>;
+}
+
+/* export function SignOut() {
   return (
     <form
       action={async () => {
@@ -11,4 +16,4 @@ export function SignOut() {
       <button type="submit">Sign Out</button>
     </form>
   );
-}
+} */

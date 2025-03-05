@@ -41,7 +41,6 @@ const AddContactButton = ({ projectId }: AddContactButtonProps) => {
         lastName,
         email,
         phone,
-        tags: [],
       });
 
       // Refresh the page and close the dialog

@@ -5,15 +5,13 @@ import ProjectModel from "@/models/Project";
 import connectDB from "@/lib/db";
 import { normalizeData } from "./normalizeData";
 import validator from "validator";
+import contactValidator from "@/validators/contact";
 
 export async function getContacts(projectId: string) {
   try {
-    const foundProject = await ProjectModel.findById(projectId).populate(
-      "contacts",
-      null,
-      ContactModel
-    );
-    return foundProject.contacts;
+    const foundContacts = await ContactModel.find({ project: projectId });
+    console.log(foundContacts);
+    return normalizeData(foundContacts) || [];
   } catch (error) {
     console.error("Errore durante l'ottenimento dei contatti", error);
     throw new Error("Errore durante l'ottenimento dei contatti");
@@ -22,16 +20,7 @@ export async function getContacts(projectId: string) {
 
 export async function addContact(
   projectId: string,
-  {
-    firstName,
-    lastName,
-    email,
-    phone,
-    birthDate,
-    address,
-    language,
-    tags = [],
-  }: {
+  data: {
     firstName: string;
     lastName: string;
     email: string;
@@ -42,66 +31,31 @@ export async function addContact(
     tags?: string[];
   }
 ) {
-  // Define Zod schema for validation
-  const contactSchema = z.object({
-    firstName: z.string().min(1, "Il nome è obbligatorio."),
-    lastName: z.string().min(1, "Il cognome è obbligatorio."),
-    email: z
-      .string()
-      .min(1, "L'email è obbligatoria.")
-      .refine((value) => validator.isEmail(value), {
-        message: "Email non valida.",
-      }),
-    phone: z
-      .string()
-      .optional()
-      .refine((value) => !value || validator.isMobilePhone(value, "any"), {
-        message: "Numero di telefono non valido.",
-      }),
-    birthDate: z
-      .instanceof(Date)
-      .optional()
-      .refine((value) => !value || validator.isDate(value.toString()), {
-        message: "Data di nascita non valida.",
-      }),
-    address: z.string().optional(),
-    language: z.string().optional(),
-    tags: z.array(z.string()).optional(),
-  });
-
-  const projectSchema = z
-    .string()
-    .nonempty("Il campo 'projectId' è obbligatorio.");
+  const {
+    firstName,
+    lastName,
+    email,
+    phone,
+    birthDate,
+    address,
+    language,
+    tags = [],
+  } = data;
 
   try {
     // Validate input
-    const validContact = contactSchema.parse({
-      firstName,
-      lastName,
-      email,
-      phone,
-      birthDate,
-      address,
-      language,
-      tags,
-    });
-    const validProjectId = projectSchema.parse(projectId);
+    const validContact = contactValidator.parse(data);
 
     // Connect to the database
     await connectDB();
 
     // Create a new contact
-    const newContact = new ContactModel(validContact);
+    const newContact = new ContactModel({
+      project: projectId,
+      ...validContact,
+    });
+
     const savedContact = await newContact.save();
-
-    // Find the project and update its contacts array
-    const project = await ProjectModel.findById(validProjectId);
-    if (!project) {
-      throw new Error("Progetto non trovato");
-    }
-
-    project.contacts.push(savedContact._id);
-    await project.save();
 
     return normalizeData(savedContact);
   } catch (error) {
@@ -115,16 +69,10 @@ export async function addContact(
 }
 
 export async function deleteContact(contactId: string) {
-  console.log("deleting...", contactId);
-  const deleteSchema = z
-    .string()
-    .nonempty("Il campo 'contactId' è obbligatorio.");
-  const validContactId = deleteSchema.parse(contactId);
-
   try {
     await connectDB();
     const deletedContact = await ContactModel.findOneAndDelete({
-      _id: validContactId,
+      _id: contactId,
     });
     return normalizeData(deletedContact);
   } catch (error) {
@@ -135,16 +83,7 @@ export async function deleteContact(contactId: string) {
 
 export async function patchContact(
   contactId: string,
-  {
-    firstName,
-    lastName,
-    email,
-    phone,
-    birthDate,
-    address,
-    language,
-    tags,
-  }: {
+  data: {
     firstName?: string;
     lastName?: string;
     email?: string;
@@ -155,34 +94,6 @@ export async function patchContact(
     tags?: string[];
   }
 ) {
-  // Define Zod schema for validation
-  const contactSchema = z.object({
-    firstName: z.string().min(1, "Il nome è obbligatorio.").optional(),
-    lastName: z.string().min(1, "Il cognome è obbligatorio.").optional(),
-    email: z
-      .string()
-      .min(1, "L'email è obbligatoria.")
-      .refine((value) => validator.isEmail(value), {
-        message: "Email non valida.",
-      })
-      .optional(),
-    phone: z
-      .string()
-      .optional()
-      .refine((value) => !value || validator.isMobilePhone(value, "any"), {
-        message: "Numero di telefono non valido.",
-      }),
-    birthDate: z
-      .instanceof(Date)
-      .optional()
-      .refine((value) => !value || validator.isDate(value.toString()), {
-        message: "Data di nascita non valida.",
-      }),
-    address: z.string().optional(),
-    language: z.string().optional(),
-    tags: z.array(z.string()).optional(),
-  });
-
   const contactIdSchema = z
     .string()
     .nonempty("Il campo 'contactId' è obbligatorio.");
@@ -190,16 +101,7 @@ export async function patchContact(
   try {
     // Validate input
     const validContactId = contactIdSchema.parse(contactId);
-    const validContact = contactSchema.parse({
-      firstName,
-      lastName,
-      email,
-      phone,
-      birthDate,
-      address,
-      language,
-      tags,
-    });
+    const validContact = contactValidator.parse(data);
 
     // Connect to the database
     await connectDB();
@@ -210,7 +112,7 @@ export async function patchContact(
       throw new Error("Contatto non trovato");
     }
 
-    // Update the contact fields if they are provided
+    // Update the contact fields only if they are provided
     if (validContact.firstName) contact.firstName = validContact.firstName;
     if (validContact.lastName) contact.lastName = validContact.lastName;
     if (validContact.email) contact.email = validContact.email;

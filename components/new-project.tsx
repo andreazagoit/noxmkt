@@ -35,7 +35,7 @@ const NewProject = () => {
 
       const data = await response.json();
 
-      router.push(`/projects/${data.project._id}`);
+      router.push(`/dashboard/${data.project._id}`);
       router.refresh();
     } catch (error) {
       console.error("Error creating project:", error);

@@ -1,5 +1,5 @@
 import React from "react";
-import { getProjectById } from "@/utils/project";
+import { getProjectById, getProjectData } from "@/utils/project";
 import Container from "@/components/ui/container";
 import { getProfiles } from "@/utils/profiles";
 import Chart1 from "@/components/charts/chart-1";
@@ -12,6 +12,7 @@ type ProjectPageProps = {
 const ProjectPage = async ({ params }: ProjectPageProps) => {
   const { projectId } = await params;
   const project = await getProjectById(projectId);
+  const projectData = await getProjectData(projectId);
 
   const profiles = await getProfiles(projectId);
 
@@ -21,9 +22,9 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
         <h2 className="text-4xl sm:text-6xl font-semibold mb-8">Dashboard</h2>
         <div className="mb-4 flex gap-4">
           <Card className="flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left sm:px-8 sm:py-6">
-            <span className="text-xs text-muted-foreground">Active User</span>
+            <span className="text-xs text-muted-foreground">Audience</span>
             <span className="text-lg font-bold leading-none sm:text-3xl">
-              1243
+              {projectData.audienceCount}
             </span>
           </Card>
           <Card className="flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left sm:px-8 sm:py-6">

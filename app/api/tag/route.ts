@@ -7,8 +7,6 @@ export async function PUT(req: Request) {
 
   const session = auth();
 
-  console.log(session);
-
   const { owner } = await req.json();
 
   try {

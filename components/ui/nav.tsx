@@ -1,15 +1,17 @@
+import { cn } from "@/lib/utils";
 import React from "react";
 
 type NavProps = {
-  leftItems?: React.ReactNode;
-  rightItems?: React.ReactNode;
+  children: React.ReactNode;
+  className?: string;
 };
 
-const Nav = ({ leftItems, rightItems }: NavProps) => {
+const Nav = ({ children, className }: NavProps) => {
   return (
-    <nav className="flex justify-between items-center p-4">
-      <div className="flex">{leftItems}</div>
-      <div className="flex">{rightItems}</div>
+    <nav
+      className={cn("flex justify-between items-center py-4 gap-4", className)}
+    >
+      {children}
     </nav>
   );
 };

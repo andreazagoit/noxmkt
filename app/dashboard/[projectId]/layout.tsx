@@ -5,8 +5,8 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 
 export const metadata: Metadata = {
-  title: "NOXMKT",
-  description: "Noxis Marketing",
+  title: "NoxisFlow",
+  description: "Marketing e automazione",
 };
 
 type RootLayoutProps = {
