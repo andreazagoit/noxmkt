@@ -33,10 +33,6 @@ const CampaignPage = async ({ params }: CampaignPageProps) => {
         </h2>
         <p>{JSON.stringify(campaign.status)}</p>
         <p>{JSON.stringify(campaign.actions)}</p>
-        <img
-          className="hidden"
-          src={`${process.env.NEXT_PUBLIC_BASE_URL}/api/email/tracking?uid=12345&cid=${campaignId}`}
-        />
       </div>
       <Nav className="justify-end">
         <Button variant="outline">Salva Draft</Button>
