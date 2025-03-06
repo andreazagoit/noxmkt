@@ -8,6 +8,7 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { auth } from "@/auth";
 import { useSession, SessionProvider } from "next-auth/react";
+import DndProviderWrapper from "@/components/DndProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,15 +34,17 @@ export default async function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className="flex flex-col h-screen">
         <SessionProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="dark" /* system */
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-            <Toaster />
-          </ThemeProvider>
+          <DndProviderWrapper>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="dark" /* system */
+              enableSystem
+              disableTransitionOnChange
+            >
+              {children}
+              <Toaster />
+            </ThemeProvider>
+          </DndProviderWrapper>
         </SessionProvider>
       </body>
     </html>

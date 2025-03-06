@@ -12,9 +12,10 @@ const ComposerPage = async ({ params }: ComposerPageProps) => {
   return (
     <div className="flex flex-col h-screen">
       {/* <EmailComposer projectId={projectId} /> */}
-      <DndProviderWrapper>
+      {/* <DndProviderWrapper>
         <EmailComposer projectId={projectId} />
-      </DndProviderWrapper>
+      </DndProviderWrapper> */}
+      single email
     </div>
   );
 };

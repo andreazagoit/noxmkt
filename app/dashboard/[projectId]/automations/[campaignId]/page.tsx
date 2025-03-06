@@ -1,4 +1,3 @@
-import AddCampaignAction from "@/components/add-campaign-action";
 import DeleteCampaignButton from "@/components/delete-campaign-button";
 import GoBackButton from "@/components/go-back-button";
 import { Button } from "@/components/ui/button";
@@ -20,7 +19,7 @@ const CampaignPage = async ({ params }) => {
         <Nav className="justify-between">
           <GoBackButton />
           <div className="flex gap-4">
-            <AddCampaignAction />
+            {/* <AddCampaignAction /> */}
             <DeleteCampaignButton campaignId={campaignId} />
           </div>
         </Nav>

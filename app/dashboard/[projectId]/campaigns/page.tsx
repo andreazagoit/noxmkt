@@ -213,43 +213,6 @@ const CampaignsPage = async ({ params }) => {
             </Link>
           ))}
         </div>
-
-        {/* <h2 className="text-4xl sm:text-6xl font-semibold mb-8">Automations</h2> */}
-
-        {/* <button
-          onClick={handleCreateAutomation}
-          className="bg-green-500 text-white py-2 px-4 rounded-lg mb-6"
-        >
-          Create New Automation
-        </button>
-
-        <div className="space-y-4">
-          {automations.map((automation) => (
-            <Card key={automation.id} className="p-4 shadow-lg rounded-lg">
-              <div className="flex justify-between">
-                <div>
-                  <h3 className="text-xl font-medium">{automation.name}</h3>
-                  <p className="text-gray-500">Trigger: {automation.trigger}</p>
-                  <p className="text-gray-500">Status: {automation.status}</p>
-                  <div className="mt-2">
-                    <h4 className="font-semibold">Actions</h4>
-                    <ul>
-                      {automation.actions.map((action) => (
-                        <li key={action.id} className="text-gray-500">
-                          {action.type} -{" "}
-                          {action.data
-                            ? JSON.stringify(action.data)
-                            : "No data"}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </Card>
-          ))}
-        </div> */}
-        {/* <Button onClick={handleExecuteActions}>Elabora</Button> */}
       </div>
     </Container>
   );

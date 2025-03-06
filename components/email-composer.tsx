@@ -11,11 +11,10 @@ import DraggableBlock, { DraggableTypes } from "./draggable-block";
 import { Card } from "./ui/card";
 import { Textarea } from "./ui/textarea";
 
-const EmailComposer = ({ projectId }) => {
+const EmailComposer = ({ projectId, onSave }) => {
   const [blocks, setBlocks] = useState([]);
   const [selectedBlock, setSelectedBlock] = useState(null);
   const [title, setTitle] = useState("Titolo");
-  const [receivers, setReceivers] = useState("Everyone");
   const [isDeleteHovered, setIsDeleteHovered] = useState(false);
 
   const blocksList = {
@@ -216,7 +215,7 @@ const EmailComposer = ({ projectId }) => {
   };
 
   const handleSendEmail = async () => {
-    const textContent = renderBlocks(blocks, blocksList, "text");
+    /*  const textContent = renderBlocks(blocks, blocksList, "text");
     const htmlContent = generateEmailHtml(
       renderBlocks(blocks, blocksList, "html")
     );
@@ -233,7 +232,7 @@ const EmailComposer = ({ projectId }) => {
         text: textContent,
         html: htmlContent,
       },
-    });
+    }); */
   };
 
   const [hoverIndex, setHoverIndex] = useState(null);
@@ -313,19 +312,13 @@ const EmailComposer = ({ projectId }) => {
   ];
 
   return (
-    <div className="flex flex-row h-full">
-      <div className="flex-[0.75] p-4 flex flex-col">
-        <Input
-          className="mb-4"
-          value={receivers}
-          onChange={(e) => setReceivers(e.target.value)}
-        />
+    <div className="flex flex-row h-full gap-4">
+      <div className="flex-[0.75] flex flex-col">
         <Input
           className="mb-4"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
-        <h3 className="font-bold text-xl mb-4">Composer</h3>
 
         <div
           className="p-4 border border-dashed border-white rounded-md mb-4 flex-1"
@@ -368,11 +361,8 @@ const EmailComposer = ({ projectId }) => {
           )}
         </div>
         <div className="p-4">
-          <Button
-            className="w-full bg-blue-600 text-white"
-            onClick={handleSendEmail}
-          >
-            Send Email
+          <Button className="w-full" onClick={() => onSave({ title, blocks })}>
+            Salva
           </Button>
         </div>
       </div>
