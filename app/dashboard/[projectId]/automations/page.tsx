@@ -61,7 +61,6 @@ const CampaignsPage = async ({ params }) => {
   const { projectId } = await params;
 
   const campaigns = await getCampaigns(projectId);
-  console.log(campaigns);
 
   /* const [campaigns, setCampaigns] = useState<Campaign[]>([
     {

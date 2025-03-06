@@ -4,6 +4,58 @@ import ContactModel from "@/models/Contact";
 import ProfileModel from "@/models/Profiles";
 import ProjectModel from "@/models/Project";
 import nodemailer from "nodemailer";
+import { hashEmail } from "./crypto";
+
+type SendSingleEmailProps = {
+  profile: any;
+  list: string[];
+  data: {
+    title: string;
+    text: string;
+    html: string;
+  };
+};
+
+export const sendSingleEmail = async (
+  profile: any,
+  recipient: string,
+  data: { title: string; text: string; html: string; campaignId: string }
+) => {
+  const { title, text, html, campaignId } = data;
+
+  const transporter = nodemailer.createTransport({
+    host: profile.host,
+    port: profile.port,
+    secure: profile.secure,
+    auth: {
+      user: profile.email,
+      pass: profile.password,
+    },
+  });
+
+  const trackingPixel = `<img src="${
+    process.env.NEXT_PUBLIC_BASE_URL
+  }/api/email/tracking?uid=${hashEmail(
+    recipient
+  )}&cid=${campaignId}" width="1" height="1" style="display:none;">`;
+
+  const mailOptions = {
+    from: profile.email,
+    to: recipient,
+    subject: title,
+    text,
+    html: `${html} ${trackingPixel}`,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log("Email inviata a", recipient);
+    return { success: true };
+  } catch (error) {
+    console.error("Errore durante l'invio dell'email:", error);
+    return { success: false, error: "Invio dell'email fallito" };
+  }
+};
 
 type SendEmailProps = {
   projectId: string;
@@ -38,6 +90,7 @@ export const sendEmail = async ({
     const foundProfile = await ProfileModel.findOne({
       email: project.profiles?.[0].email,
     });
+
     if (!foundProfile) {
       throw new Error("Profilo non trovato.");
     }
@@ -55,15 +108,12 @@ export const sendEmail = async ({
       maxMessages: 100,
     });
 
-    // Collect all emails to send
     let emailsToSend: string[] = [...receivers.emails];
 
-    // Handle "Everyone" tag
     if (receivers.tags.includes("Everyone")) {
       const allEmails = project.contacts.map((contact: any) => contact.email);
       emailsToSend = [...emailsToSend, ...allEmails];
     } else {
-      // Filter by specific tags
       for (const tag of receivers.tags) {
         const taggedContacts = await ContactModel.find({
           _id: { $in: project.contacts },
@@ -76,7 +126,6 @@ export const sendEmail = async ({
       }
     }
 
-    // Remove duplicates
     emailsToSend = [...new Set(emailsToSend)];
 
     for (const recipientEmail of emailsToSend) {

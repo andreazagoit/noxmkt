@@ -1,5 +1,4 @@
 "use client";
-import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import React from "react";
 import { useSession, SessionProvider } from "next-auth/react";

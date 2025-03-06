@@ -1,17 +1,18 @@
 import AddCampaignAction from "@/components/add-campaign-action";
 import DeleteCampaignButton from "@/components/delete-campaign-button";
 import GoBackButton from "@/components/go-back-button";
+import StartCampaignButton from "@/components/start-campaign-button";
 import { Button } from "@/components/ui/button";
 import Container from "@/components/ui/container";
 import Nav from "@/components/ui/nav";
 import { getCampaignById } from "@/utils/campaign";
 
 type CampaignPageProps = {
-  params: Promise<{ campaignId: string }>;
+  params: Promise<{ projectId: string; campaignId: string }>;
 };
 
 const CampaignPage = async ({ params }: CampaignPageProps) => {
-  const { campaignId } = await params;
+  const { projectId, campaignId } = await params;
 
   const campaign = await getCampaignById(campaignId);
 
@@ -33,12 +34,13 @@ const CampaignPage = async ({ params }: CampaignPageProps) => {
         <p>{JSON.stringify(campaign.status)}</p>
         <p>{JSON.stringify(campaign.actions)}</p>
         <img
+          className="hidden"
           src={`${process.env.NEXT_PUBLIC_BASE_URL}/api/email/tracking?uid=12345&cid=${campaignId}`}
         />
       </div>
       <Nav className="justify-end">
         <Button variant="outline">Salva Draft</Button>
-        <Button>Avvia Campagna</Button>
+        <StartCampaignButton projectId={projectId} campaignId={campaignId} />
       </Nav>
     </Container>
   );

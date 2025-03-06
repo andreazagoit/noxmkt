@@ -28,3 +28,10 @@ export function decryptPassword(encryptedData: {
   ]);
   return decrypted.toString("utf8");
 }
+
+export const hashEmail = async (email) => {
+  return crypto
+    .createHash("md5")
+    .update(email.trim().toLowerCase())
+    .digest("hex");
+};
