@@ -19,7 +19,7 @@ const DeleteCampaignButton = ({ campaignId }: DeleteCampaignButtonProps) => {
 
   return (
     <Button variant="outline" onClick={handleDelete}>
-      Delete Campaign
+      Elimina campagna
     </Button>
   );
 };

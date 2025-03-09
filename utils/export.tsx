@@ -91,3 +91,32 @@ export const renderBlock = (
 
   return renderedContent.join ? renderedContent.join("") : renderedContent;
 };
+
+export const renderBlocks = (
+  blocks,
+  blocksList,
+  mode: "component" | "html" | "text"
+) => {
+  const renderResults = blocks.map((block) => {
+    const renderer = blocksList[block.blockType]?.renderer?.[mode];
+
+    if (!renderer) {
+      console.warn(`Renderer not found for block type: ${block.blockType}`);
+      return null;
+    }
+
+    return renderer(block);
+  });
+
+  if (mode === "component") {
+    return (
+      <React.Fragment>
+        {renderResults.map((block, index) => (
+          <React.Fragment key={index}>{block}</React.Fragment>
+        ))}
+      </React.Fragment>
+    );
+  }
+
+  return renderResults.filter(Boolean).join("");
+};

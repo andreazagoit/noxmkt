@@ -16,10 +16,14 @@ import {
 import Nav from "./ui/nav";
 import { sendSingleEmail } from "@/utils/email";
 import { Card, CardDescription, CardTitle } from "./ui/card";
+import { updateCampaignActions } from "@/utils/campaign";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const CampaignActions = ({ projectId, campaign, campaignId }) => {
   const [dialog, setDialog] = useState<undefined | "add_email">();
-  const [actions, setActions] = useState([]);
+  const [actions, setActions] = useState([...campaign.actions]);
+  const router = useRouter();
 
   const handleAddEmailAction = (data: any) => {
     setActions((state) => [...state, { type: "SEND_EMAIL", data }]);
@@ -30,6 +34,17 @@ const CampaignActions = ({ projectId, campaign, campaignId }) => {
     setActions((prevActions) => prevActions.filter((_, i) => i !== index));
   };
 
+  const handleSaveDraft = async () => {
+    try {
+      await updateCampaignActions(campaignId, actions);
+      toast("Campagna salvata");
+      router.back();
+    } catch (error) {
+      console.error("Error saving draft:", error);
+      alert("Failed to save draft");
+    }
+  };
+
   return (
     <>
       <Container className="flex-1 flex flex-col">
@@ -37,6 +52,7 @@ const CampaignActions = ({ projectId, campaign, campaignId }) => {
           <Nav className="justify-between">
             <GoBackButton />
             <div className="flex gap-4">
+              <p>{campaign.status}</p>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="secondary">Aggiungi azione</Button>
@@ -46,7 +62,7 @@ const CampaignActions = ({ projectId, campaign, campaignId }) => {
                     <DropdownMenuItem onClick={() => setDialog("add_email")}>
                       Invio Email
                     </DropdownMenuItem>
-                    <DropdownMenuItem>Invio Whatsapp</DropdownMenuItem>
+                    <DropdownMenuItem disabled>Invio Whatsapp</DropdownMenuItem>
                   </DropdownMenuGroup>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -69,7 +85,9 @@ const CampaignActions = ({ projectId, campaign, campaignId }) => {
           </div>
         </div>
         <Nav className="justify-end">
-          <Button variant="outline">Salva Draft</Button>
+          <Button variant="outline" onClick={handleSaveDraft}>
+            Salva Draft
+          </Button>
           <StartCampaignButton
             projectId={projectId}
             campaignId={campaignId}

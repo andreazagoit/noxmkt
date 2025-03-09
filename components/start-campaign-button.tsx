@@ -9,6 +9,9 @@ import { renderBlocks } from "./email-composer";
 import { generateEmailHtml } from "@/utils/export";
 import ComposerWrapper from "./composer/composer-wrapper";
 import { DraggableTypes } from "./draggable-block";
+import { startCampaign, updateCampaignActions } from "@/utils/campaign";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 type StartCampaignButtonProps = {
   projectId: string;
@@ -21,61 +24,17 @@ const StartCampaignButton = ({
   campaignId,
   actions,
 }: StartCampaignButtonProps) => {
-  const blocksList = {
-    text: {
-      defaultData: {
-        value: "Sample Text",
-      },
-      renderer: {
-        html: (props) => `<p>${props.value}</p>`,
-        text: (props) => `${props.value}\n`,
-      },
-    },
-    button: {
-      defaultData: {
-        link: "https://example.com",
-        children: "Click Me",
-      },
-      renderer: {
-        text: (props) => `[Button: ${props.link}]`,
-        html: (props) =>
-          `<a href="${props.link}" target="_blank" style="display: inline-block; background-color: #007BFF; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 5px; text-align: center;">${props.children}</a>`,
-      },
-    },
-    heading: {
-      defaultData: {
-        value: "Sample Heading",
-      },
-      renderer: {
-        text: (props) => `[Heading: ${props.value}]`,
-        html: (props) => `<h2>${props.value}</h2>`,
-      },
-    },
-    spacer: {
-      defaultData: {
-        size: "32px",
-      },
-      renderer: {
-        text: (props) => `[Spacer: ${props.size}]`,
-        html: (props) => `<div style="height: ${props.size};"></div>`,
-      },
-    },
-    separator: {
-      defaultData: {},
-      renderer: {
-        text: (props) => "[Separator]",
-        html: (props) =>
-          `<hr style="margin: 16px 0; border-top: 2px solid #ccc;" />`,
-      },
-    },
-  };
-
+  const router = useRouter();
   const handleSubmit = async () => {
-    try {
+    const savedCampaign = await updateCampaignActions(campaignId, actions);
+    const startedCampaign = await startCampaign(campaignId);
+    router.refresh();
+    toast("Campagna completata");
+
+    /* try {
       const profiles = await getProfiles(projectId);
       const contacts = await getContacts(projectId);
 
-      console.log("Azioni da eseguire:", actions);
 
       for (const action of actions) {
         if (action.type !== "SEND_EMAIL") continue;
@@ -112,7 +71,7 @@ const StartCampaignButton = ({
       console.log("Campagna completata!");
     } catch (error) {
       console.error("Errore nell'avvio della campagna:", error);
-    }
+    } */
   };
 
   return <Button onClick={handleSubmit}>Avvia Campagna</Button>;
