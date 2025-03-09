@@ -28,8 +28,10 @@ const StartCampaignButton = ({
   const handleSubmit = async () => {
     const savedCampaign = await updateCampaignActions(campaignId, actions);
     const startedCampaign = await startCampaign(campaignId);
-    router.refresh();
-    toast("Campagna completata");
+    if (startedCampaign) {
+      router.refresh();
+      toast("Campagna completata");
+    }
 
     /* try {
       const profiles = await getProfiles(projectId);

@@ -27,9 +27,11 @@ const NewCampaign = ({ projectId }: NewCampaignProps) => {
   const handleSubmit = async () => {
     try {
       const newCampaign = await addCampaign(projectId, { name });
-      router.push(`campaigns/${newCampaign._id}`);
-      setOpen(false);
-      router.refresh();
+      if (newCampaign) {
+        router.push(`campaigns/${newCampaign._id}`);
+        setOpen(false);
+        router.refresh();
+      }
     } catch (error) {
       console.log(error);
     }

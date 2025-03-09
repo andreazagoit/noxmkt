@@ -13,8 +13,10 @@ const DeleteCampaignButton = ({ campaignId }: DeleteCampaignButtonProps) => {
   const router = useRouter();
   const handleDelete = async () => {
     const deletedCampaign = await deleteCampaign(campaignId);
-    toast(`Eliminiazione campagna ${deletedCampaign.name} riuscita`);
-    router.back();
+    if (deleteCampaign) {
+      toast(`Eliminiazione campagna ${deletedCampaign.name} riuscita`);
+      router.back();
+    }
   };
 
   return (
