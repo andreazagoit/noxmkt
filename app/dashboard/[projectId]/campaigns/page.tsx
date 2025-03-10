@@ -195,7 +195,7 @@ const CampaignsPage = async ({ params }) => {
         <div className="py-4 flex justify-end">
           <NewCampaign projectId={projectId} />
         </div>
-        <h2 className="text-4xl sm:text-6xl font-semibold mb-8">Campaigns</h2>
+        <h2 className="text-4xl sm:text-6xl font-semibold mb-8">Campagne</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
           {campaigns.map((campaign) => (

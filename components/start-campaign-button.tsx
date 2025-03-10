@@ -12,6 +12,7 @@ import { DraggableTypes } from "./draggable-block";
 import { startCampaign, updateCampaignActions } from "@/utils/campaign";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { FaPlay } from "react-icons/fa";
 
 type StartCampaignButtonProps = {
   projectId: string;
@@ -76,7 +77,12 @@ const StartCampaignButton = ({
     } */
   };
 
-  return <Button onClick={handleSubmit}>Avvia Campagna</Button>;
+  return (
+    <Button onClick={handleSubmit}>
+      <FaPlay />
+      Avvia Campagna
+    </Button>
+  );
 };
 
 export default StartCampaignButton;

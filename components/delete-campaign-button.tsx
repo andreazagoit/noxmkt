@@ -4,6 +4,7 @@ import { Button } from "./ui/button";
 import { deleteCampaign } from "@/utils/campaign";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { MdDelete } from "react-icons/md";
 
 type DeleteCampaignButtonProps = {
   campaignId: string;
@@ -20,7 +21,8 @@ const DeleteCampaignButton = ({ campaignId }: DeleteCampaignButtonProps) => {
   };
 
   return (
-    <Button variant="outline" onClick={handleDelete}>
+    <Button variant="destructive" onClick={handleDelete}>
+      <MdDelete />
       Elimina campagna
     </Button>
   );
