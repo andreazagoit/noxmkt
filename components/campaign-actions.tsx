@@ -77,7 +77,7 @@ const CampaignActions = ({ projectId, campaign, campaignId }) => {
           <h2 className="text-4xl sm:text-6xl font-semibold my-8">
             {campaign.name}
           </h2>
-          <div className="grid grid-cols-4 gap-4 mb-4">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
             <Card className="flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left sm:px-8 sm:py-6">
               <span className="text-xs text-muted-foreground">
                 Email Inviate
