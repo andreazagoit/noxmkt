@@ -125,7 +125,7 @@ const CampaignActions = ({ projectId, campaign, campaignId }) => {
             ))}
           </div>
         </div>
-        <Nav>
+        <Nav className="justify-end md:justify-between">
           <DeleteCampaignButton campaignId={campaignId} />
           <div className="flex gap-4">
             <Button variant="outline" onClick={handleSaveDraft}>

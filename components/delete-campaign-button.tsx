@@ -21,7 +21,11 @@ const DeleteCampaignButton = ({ campaignId }: DeleteCampaignButtonProps) => {
   };
 
   return (
-    <Button variant="destructive" onClick={handleDelete}>
+    <Button
+      variant="destructive"
+      onClick={handleDelete}
+      className="hidden md:flex"
+    >
       <MdDelete />
       Elimina campagna
     </Button>
