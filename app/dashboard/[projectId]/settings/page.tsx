@@ -2,10 +2,16 @@ import CodeBox from "@/components/code-box";
 import ProfileConfiguration from "@/components/profile-configuration";
 import Container from "@/components/ui/container";
 import { getProjectById } from "@/utils/project";
+import { Metadata } from "next";
 import React from "react";
 
 type SettingsPageProps = {
   params: Promise<{ projectId: string }>;
+};
+
+export const metadata: Metadata = {
+  title: "NoxisFlow | Settings",
+  description: "Handle your settings",
 };
 
 const SettingsPage = async ({ params }: SettingsPageProps) => {

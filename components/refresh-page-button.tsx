@@ -7,7 +7,11 @@ const RefreshPageButton = () => {
   const router = useRouter();
 
   return (
-    <Button variant="outline" onClick={() => router.refresh()}>
+    <Button
+      variant="outline"
+      onClick={() => router.refresh()}
+      className="hidden lg:flex"
+    >
       <MdRefresh />
       Aggiorna
     </Button>

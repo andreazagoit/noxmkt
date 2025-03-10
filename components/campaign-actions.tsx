@@ -74,7 +74,7 @@ const CampaignActions = ({ projectId, campaign, campaignId }) => {
               </DropdownMenu>
             </div>
           </Nav>
-          <h2 className="text-4xl sm:text-6xl font-semibold my-8">
+          <h2 className="text-4xl sm:text-6xl font-semibold my-8 mt-6">
             {campaign.name}
           </h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
