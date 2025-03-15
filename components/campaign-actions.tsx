@@ -22,6 +22,7 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import Nav from "./ui/nav";
+import { ActionTypes } from "@/utils/actions";
 
 const CampaignActions = ({ projectId, campaign, campaignId }) => {
   const [dialog, setDialog] = useState<undefined | "add_email">();
@@ -115,13 +116,11 @@ const CampaignActions = ({ projectId, campaign, campaignId }) => {
           </div>
           <div className="flex flex-col gap-4">
             {actions.map((action, i) => (
-              <Card className="p-4 flex flex-col gap-4 items-start" key={i}>
-                <CardTitle>{action.type}</CardTitle>
-                <CardDescription>{JSON.stringify(action.data)}</CardDescription>
-                <Button variant="outline" onClick={() => handleDeleteAction(i)}>
-                  Rimuovi
-                </Button>
-              </Card>
+              <div key={i}>
+                {ActionTypes.SEND_EMAIL.actionCard(action, () =>
+                  handleDeleteAction(i)
+                )}
+              </div>
             ))}
           </div>
         </div>

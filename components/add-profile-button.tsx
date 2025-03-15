@@ -21,11 +21,13 @@ type AddProfileButtonProps = {
 
 const AddProfileButton = ({ projectId }: AddProfileButtonProps) => {
   const [formData, setFormData] = useState({
+    name: "",
     email: "",
     host: "",
     port: "",
     password: "",
     secure: true,
+    default: false,
   });
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const router = useRouter();
@@ -43,8 +45,8 @@ const AddProfileButton = ({ projectId }: AddProfileButtonProps) => {
     try {
       const newProfile = await addProfile(projectId, { ...formData });
       if (newProfile) {
-        setIsDialogOpen(false); // Close the dialog
-        router.refresh(); // Refresh the page or data
+        setIsDialogOpen(false);
+        router.refresh();
       } else {
         console.error("Failed to add profile");
       }
@@ -67,6 +69,14 @@ const AddProfileButton = ({ projectId }: AddProfileButtonProps) => {
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
+            <Input
+              name="name"
+              type="text"
+              placeholder="Name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+            />
             <Input
               name="email"
               type="email"
@@ -107,6 +117,15 @@ const AddProfileButton = ({ projectId }: AddProfileButtonProps) => {
                 onChange={handleChange}
               />
               <span>Secure</span>
+            </label>
+            <label className="flex items-center space-x-2">
+              <input
+                name="default"
+                type="checkbox"
+                checked={formData.default}
+                onChange={handleChange}
+              />
+              <span>Set as main account</span>
             </label>
           </div>
           <DialogFooter>

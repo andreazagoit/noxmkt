@@ -1,5 +1,7 @@
 import { getProfiles } from "@/utils/profiles";
-import React from "react";
+import AddProfileButton from "./add-profile-button";
+import DeleteProfileButton from "./delete-profile-button";
+import SetDefaultProfileButton from "./set-default-profile-button";
 import {
   Table,
   TableBody,
@@ -8,8 +10,6 @@ import {
   TableHeader,
   TableRow,
 } from "./ui/table";
-import AddProfileButton from "./add-profile-button";
-import DeleteProfileButton from "./delete-profile-button";
 
 type ProfileConfigurationProps = {
   projectId: string;
@@ -30,22 +30,32 @@ const ProfileConfiguration = async ({
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>id</TableHead>
+              <TableHead>Name</TableHead>
               <TableHead>Email</TableHead>
               <TableHead>Host</TableHead>
               <TableHead>Port</TableHead>
               <TableHead>Secure</TableHead>
+              <TableHead>Default</TableHead>
+              <TableHead>Set Default</TableHead>
               <TableHead>Delete</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {profiles.map((profile: any, i: number) => (
               <TableRow key={profile._id}>
-                <TableCell>{i + 1}</TableCell>
+                <TableCell>{profile.name}</TableCell>
                 <TableCell>{profile.email}</TableCell>
                 <TableCell>{profile.host}</TableCell>
                 <TableCell>{profile.port}</TableCell>
-                <TableCell>{profile.secure ? "v" : "x"}</TableCell>
+                <TableCell>{profile.secure ? "true" : "false"}</TableCell>
+                <TableCell>{profile.default ? "true" : "false"}</TableCell>
+                <TableCell>
+                  {!profile.default ? (
+                    <SetDefaultProfileButton profileId={profile._id} />
+                  ) : (
+                    "default profile"
+                  )}
+                </TableCell>
                 <TableCell>
                   <DeleteProfileButton
                     projectId={projectId}

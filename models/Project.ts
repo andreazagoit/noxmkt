@@ -19,12 +19,6 @@ const projectSchema = new mongoose.Schema({
       ref: "Tag",
     },
   ],
-  profiles: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Profile",
-    },
-  ],
 });
 
 const ProjectModel =

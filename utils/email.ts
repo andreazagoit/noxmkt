@@ -5,6 +5,7 @@ import ProfileModel from "@/models/Profiles";
 import ProjectModel from "@/models/Project";
 import nodemailer from "nodemailer";
 import { hashEmail } from "./crypto";
+import SMTPTransport from "nodemailer/lib/smtp-transport";
 
 type SendSingleEmailProps = {
   profile: any;
@@ -39,8 +40,8 @@ export const sendSingleEmail = async (
     recipient
   )}&cid=${campaignId}" width="1" height="1" style="display:none;">`;
 
-  const mailOptions = {
-    from: profile.email,
+  const mailOptions: SMTPTransport.Options = {
+    from: `"${profile.name}" <${profile.email}>`,
     to: recipient,
     subject: title,
     text,

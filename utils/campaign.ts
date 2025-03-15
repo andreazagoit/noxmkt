@@ -3,11 +3,12 @@ import CampaignModel from "@/models/Campaign";
 import { normalizeData } from "./normalizeData";
 import connectDB from "@/lib/db";
 import ProjectModel from "@/models/Project";
-import { getProfiles } from "./profiles";
+import { getDefaultProfile, getProfiles } from "./profiles";
 import { getContacts } from "./contact";
 import { generateEmailHtml } from "./export";
 import { sendSingleEmail } from "./email";
 import { renderBlocks } from "@/utils/export";
+import { ActionTypes } from "./actions";
 
 export const addCampaign = async (projectId, data: { name: string }) => {
   await connectDB();
@@ -84,8 +85,6 @@ export const updateCampaignActions = async (campaignId, actions) => {
 };
 
 export const startCampaign = async (campaignId) => {
-  console.log("aaa");
-
   const blocksList = {
     text: {
       defaultData: {
@@ -136,42 +135,19 @@ export const startCampaign = async (campaignId) => {
   };
 
   const foundCampaign = await CampaignModel.findById(campaignId);
-
   const foundProject = await ProjectModel.findById(foundCampaign.projectId);
-
-  const foundProfiles = await getProfiles(foundCampaign.projectId);
-
+  const defaultProfile = await getDefaultProfile(foundCampaign.projectId);
   const contacts = await getContacts(foundCampaign.projectId);
 
   for (const action of foundCampaign.actions) {
-    if (action.type !== "SEND_EMAIL") continue;
-
-    const blocks = action.data.blocks;
-
-    try {
-      const textContent = renderBlocks(blocks, blocksList, "text");
-      const htmlContent = generateEmailHtml(
-        renderBlocks(blocks, blocksList, "html")
+    const actionHandler = ActionTypes[action.type];
+    if (actionHandler && actionHandler.executeAction) {
+      await actionHandler.executeAction(
+        action,
+        campaignId,
+        defaultProfile,
+        blocksList
       );
-      console.log(htmlContent, textContent);
-      const result = await sendSingleEmail(
-        foundProfiles[0],
-        "andreazago1997@gmail.com",
-        {
-          title: action.data.title,
-          text: textContent,
-          html: htmlContent,
-          campaignId,
-        }
-      );
-
-      if (result.success) {
-        console.log("Email inviata con successo:", action.data.title);
-      } else {
-        console.error("Errore durante l'invio dell'email:", result.error);
-      }
-    } catch (error) {
-      console.error("Errore nell'invio dell'email:", error);
     }
   }
 
