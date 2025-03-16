@@ -1,12 +1,11 @@
 "use server";
+import { ACTIONS } from "@/const/actions";
 import connectDB from "@/lib/db";
+import ActionModel from "@/models/Action";
 import CampaignModel from "@/models/Campaign";
-import ProjectModel from "@/models/Project";
 import { getContacts } from "./contact";
 import { normalizeData } from "./normalizeData";
 import { getDefaultProfile } from "./profiles";
-import ActionModel from "@/models/Action";
-import { ACTIONS } from "@/const/actions";
 
 export const addCampaign = async (projectId, data: { name: string }) => {
   await connectDB();
@@ -47,7 +46,7 @@ export const getCampaignById = async (campaignId) => {
 
     const foundActions = await ActionModel.find({ campaign: campaignId });
 
-    return normalizeData({ ...campaign, actions: foundActions });
+    return { ...normalizeData(campaign), actions: normalizeData(foundActions) };
   } catch (error) {
     console.error("Error fetching campaign:", error);
     throw error;

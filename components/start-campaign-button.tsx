@@ -1,24 +1,20 @@
 "use client";
 
-import React from "react";
-import { Button } from "./ui/button";
-import { getProfiles } from "@/utils/profiles";
-import { getContacts } from "@/utils/contact";
-import { sendSingleEmail } from "@/utils/email";
-import { renderBlocks } from "./email-composer";
-import { generateEmailHtml } from "@/utils/export";
-import ComposerWrapper from "./composer/composer-wrapper";
-import { DraggableTypes } from "./draggable-block";
 import { startCampaign } from "@/utils/campaign";
-import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { FaPlay } from "react-icons/fa";
+import { toast } from "sonner";
+import { Button } from "./ui/button";
 
 type StartCampaignButtonProps = {
   campaignId: string;
+  disabled?: boolean;
 };
 
-const StartCampaignButton = ({ campaignId }: StartCampaignButtonProps) => {
+const StartCampaignButton = ({
+  campaignId,
+  disabled,
+}: StartCampaignButtonProps) => {
   const router = useRouter();
   const handleSubmit = async () => {
     const startedCampaign = await startCampaign(campaignId);
@@ -26,52 +22,10 @@ const StartCampaignButton = ({ campaignId }: StartCampaignButtonProps) => {
       router.refresh();
       toast("Campagna completata");
     }
-
-    /* try {
-      const profiles = await getProfiles(projectId);
-      const contacts = await getContacts(projectId);
-
-
-      for (const action of actions) {
-        if (action.type !== "SEND_EMAIL") continue;
-
-        const blocks = action.data.blocks;
-
-        try {
-          const textContent = renderBlocks(blocks, blocksList, "text");
-          const htmlContent = generateEmailHtml(
-            renderBlocks(blocks, blocksList, "html")
-          );
-          console.log(htmlContent, textContent);
-          const result = await sendSingleEmail(
-            profiles[0],
-            "andreazago1997@gmail.com",
-            {
-              title: action.data.title,
-              text: textContent,
-              html: htmlContent,
-              campaignId,
-            }
-          );
-
-          if (result.success) {
-            console.log("Email inviata con successo:", action.data.title);
-          } else {
-            console.error("Errore durante l'invio dell'email:", result.error);
-          }
-        } catch (error) {
-          console.error("Errore nell'invio dell'email:", error);
-        }
-      }
-
-      console.log("Campagna completata!");
-    } catch (error) {
-      console.error("Errore nell'avvio della campagna:", error);
-    } */
   };
 
   return (
-    <Button onClick={handleSubmit}>
+    <Button onClick={handleSubmit} disabled={disabled}>
       <FaPlay />
       Avvia Campagna
     </Button>

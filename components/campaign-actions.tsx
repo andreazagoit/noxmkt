@@ -26,7 +26,6 @@ import StartCampaignButton from "./start-campaign-button";
 
 const CampaignActions = ({ projectId, campaign, campaignId }) => {
   const [dialog, setDialog] = useState<undefined | "add_email">();
-  const [actions, setActions] = useState([...campaign.actions]);
   const router = useRouter();
 
   const handleAddAction = async (data: any) => {
@@ -101,7 +100,7 @@ const CampaignActions = ({ projectId, campaign, campaignId }) => {
             </Card>
           </div>
           <div className="flex flex-col gap-4">
-            {actions.map((action, i) => (
+            {campaign.actions.map((action, i) => (
               <div key={i}>{ACTIONS.SEND_EMAIL.actionCard(action)}</div>
             ))}
           </div>
@@ -109,7 +108,10 @@ const CampaignActions = ({ projectId, campaign, campaignId }) => {
         <Nav className="justify-end md:justify-between">
           <DeleteCampaignButton campaignId={campaignId} />
           <div className="flex gap-4">
-            <StartCampaignButton campaignId={campaignId} />
+            <StartCampaignButton
+              campaignId={campaignId}
+              disabled={campaign.actions.length === 0}
+            />
           </div>
         </Nav>
       </Container>
