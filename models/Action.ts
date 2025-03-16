@@ -2,6 +2,11 @@ import mongoose from "mongoose";
 
 export const actionSchema = new mongoose.Schema(
   {
+    campaign: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Campaign",
+      required: true,
+    },
     type: {
       type: String,
       enum: ["SEND_EMAIL"],
@@ -11,5 +16,10 @@ export const actionSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.Mixed,
     },
   },
-  { _id: false }
+  { timestamps: true }
 );
+
+const ActionModel =
+  mongoose.models.Action || mongoose.model("Action", actionSchema);
+
+export default ActionModel;

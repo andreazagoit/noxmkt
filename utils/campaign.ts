@@ -1,21 +1,19 @@
 "use server";
-import CampaignModel from "@/models/Campaign";
-import { normalizeData } from "./normalizeData";
 import connectDB from "@/lib/db";
+import CampaignModel from "@/models/Campaign";
 import ProjectModel from "@/models/Project";
-import { getDefaultProfile, getProfiles } from "./profiles";
-import { getContacts } from "./contact";
-import { generateEmailHtml } from "./export";
-import { sendSingleEmail } from "./email";
-import { renderBlocks } from "@/utils/export";
 import { ActionTypes } from "./actions";
+import { getContacts } from "./contact";
+import { normalizeData } from "./normalizeData";
+import { getDefaultProfile } from "./profiles";
+import ActionModel from "@/models/Action";
 
 export const addCampaign = async (projectId, data: { name: string }) => {
   await connectDB();
   const { name } = data;
   try {
     const newCampaign = new CampaignModel({
-      projectId,
+      project: projectId, // Updated to reflect 'project' field in schema
       name,
     });
 
@@ -30,7 +28,8 @@ export const addCampaign = async (projectId, data: { name: string }) => {
 export const getCampaigns = async (projectId) => {
   await connectDB();
   try {
-    const campaigns = await CampaignModel.find({ projectId }).sort({ _id: -1 });
+    const campaigns = await CampaignModel.find({ project: projectId }) // Updated to reflect 'project' field in schema
+      .sort({ _id: -1 });
     return normalizeData(campaigns);
   } catch (error) {
     console.error("Error fetching campaigns:", error);
@@ -77,6 +76,18 @@ export const updateCampaignActions = async (campaignId, actions) => {
     if (!updatedCampaign) {
       throw new Error("Campaign not found");
     }
+
+    // Create associated actions in the 'ActionModel'
+    for (let action of actions) {
+      const newAction = new ActionModel({
+        campaign: campaignId,
+        type: action.type, // Assuming 'action' has a 'type' and 'data' field
+        data: action.data,
+      });
+
+      await newAction.save();
+    }
+
     return normalizeData(updatedCampaign);
   } catch (error) {
     console.error("Error updating campaign:", error);
@@ -134,12 +145,24 @@ export const startCampaign = async (campaignId) => {
     },
   };
 
-  const foundCampaign = await CampaignModel.findById(campaignId);
-  const foundProject = await ProjectModel.findById(foundCampaign.projectId);
-  const defaultProfile = await getDefaultProfile(foundCampaign.projectId);
-  const contacts = await getContacts(foundCampaign.projectId);
+  // Fetch the campaign and related project
+  const foundCampaign = await CampaignModel.findById(campaignId).populate(
+    "project",
+    null,
+    ProjectModel
+  );
+  if (!foundCampaign) {
+    throw new Error("Campaign not found");
+  }
 
-  for (const action of foundCampaign.actions) {
+  const foundProject = foundCampaign.project; // No need to fetch again, it's already populated
+  const defaultProfile = await getDefaultProfile(foundProject._id);
+  const contacts = await getContacts(foundProject._id);
+
+  // Fetch associated actions
+  const actions = await ActionModel.find({ campaign: campaignId });
+
+  for (const action of actions) {
     const actionHandler = ActionTypes[action.type];
     if (actionHandler && actionHandler.executeAction) {
       await actionHandler.executeAction(
@@ -151,6 +174,7 @@ export const startCampaign = async (campaignId) => {
     }
   }
 
+  // Mark the campaign as completed
   foundCampaign.status = "completed";
   await foundCampaign.save();
 

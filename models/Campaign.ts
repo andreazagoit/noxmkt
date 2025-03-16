@@ -1,9 +1,8 @@
 import mongoose from "mongoose";
-import { actionSchema } from "./Action";
 
 const campaignSchema = new mongoose.Schema(
   {
-    projectId: {
+    project: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Project",
       required: true,
@@ -14,10 +13,9 @@ const campaignSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["draft", "completed"],
+      enum: ["draft", "running", "completed"],
       default: "draft",
     },
-    actions: [actionSchema],
   },
   { timestamps: true }
 );
