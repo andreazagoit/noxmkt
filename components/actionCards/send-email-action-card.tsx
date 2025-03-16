@@ -24,9 +24,10 @@ const SendEmailActionCard = ({ action }) => {
           Rimuovi
         </Button>
       </div>
-      <CardDescription className="grid grid-cols-2 justify-between w-full">
+      <CardDescription className="grid grid-cols-3 justify-between w-full">
         <p className="uppercase">{action.data.title}</p>
         <p>{JSON.stringify(action.data)}</p>
+        <p>Stato: {action.status}</p>
       </CardDescription>
     </Card>
   );
