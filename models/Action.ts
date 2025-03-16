@@ -15,6 +15,11 @@ export const actionSchema = new mongoose.Schema(
     data: {
       type: mongoose.Schema.Types.Mixed,
     },
+    status: {
+      type: String,
+      enum: ["ready", "running", "completed", "failed"],
+      default: "ready",
+    },
   },
   { timestamps: true }
 );

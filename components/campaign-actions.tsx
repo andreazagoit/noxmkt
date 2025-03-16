@@ -94,8 +94,7 @@ const CampaignActions = ({ projectId, campaign, campaignId }) => {
             >
               <span className="text-xs text-muted-foreground">Stato</span>
               <span className="text-lg font-bold leading-none sm:text-3xl">
-                {campaign.status === "draft" && "Bozza"}
-                {campaign.status === "completed" && "Completato"}
+                aaaa
               </span>
             </Card>
           </div>

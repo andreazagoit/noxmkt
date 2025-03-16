@@ -146,8 +146,6 @@ export const startCampaign = async (campaignId) => {
     }
   }
 
-  // Mark the campaign as completed
-  foundCampaign.status = "completed";
   await foundCampaign.save();
 
   return normalizeData(foundCampaign);

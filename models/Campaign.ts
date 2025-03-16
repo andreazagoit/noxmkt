@@ -11,11 +11,6 @@ const campaignSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    status: {
-      type: String,
-      enum: ["draft", "running", "completed"],
-      default: "draft",
-    },
   },
   { timestamps: true }
 );
