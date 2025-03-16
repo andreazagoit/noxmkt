@@ -1,48 +1,35 @@
-import { Card, CardDescription, CardTitle } from "@/components/ui/card";
-import { sendSingleEmail } from "./email";
-import { generateEmailHtml, renderBlocks } from "./export";
+"use server";
+import connectDB from "@/lib/db";
+import ActionModel from "@/models/Action";
+import { normalizeData } from "./normalizeData";
 
-export const ActionTypes = {
-  SEND_EMAIL: {
-    name: "Invia Email",
-    executeAction: async (action, campaignId, profile, blocksList) => {
-      const blocks = action.data.blocks;
-      try {
-        const textContent = renderBlocks(blocks, blocksList, "text");
-        const htmlContent = generateEmailHtml(
-          renderBlocks(blocks, blocksList, "html")
-        );
+export const deleteAction = async (actionId) => {
+  await connectDB();
+  try {
+    const deletedAction = await ActionModel.findByIdAndDelete(actionId);
+    if (!deletedAction) {
+      throw new Error("Campaign not found");
+    }
 
-        const result = await sendSingleEmail(
-          profile,
-          "andreazago1997@gmail.com",
-          {
-            title: action.data.title,
-            text: textContent,
-            html: htmlContent,
-            campaignId,
-          }
-        );
-
-        if (result.success) {
-          console.log("Email inviata con successo:", action.data.title);
-        } else {
-          console.error("Errore durante l'invio dell'email:", result.error);
-        }
-      } catch (error) {
-        console.error("Errore nell'invio dell'email:", error);
-      }
-    },
-    actionCard: (action, onDelete) => (
-      <Card className="p-4 flex flex-col gap-4 items-start">
-        <CardTitle>{action.type}</CardTitle>
-        <CardDescription>{JSON.stringify(action.data)}</CardDescription>
-        {/* <Button variant="outline" onClick={onDelete}>
-          Rimuovi
-        </Button> */}
-      </Card>
-    ),
-  },
+    return normalizeData(deletedAction);
+  } catch (error) {
+    console.error("Error deleting campaign:", error);
+    throw error;
+  }
 };
 
-export type ActionType = keyof typeof ActionTypes;
+export const addAction = async (campaignId, actionData) => {
+  await connectDB();
+  try {
+    const newAction = new ActionModel({
+      campaign: campaignId,
+      ...actionData,
+    });
+
+    const savedAction = await newAction.save();
+    return normalizeData(savedAction);
+  } catch (error) {
+    console.error("Error adding action:", error);
+    throw error;
+  }
+};

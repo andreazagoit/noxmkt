@@ -361,7 +361,12 @@ const EmailComposer = ({ projectId, onSave }) => {
           )}
         </div>
         <div className="p-4">
-          <Button className="w-full" onClick={() => onSave({ title, blocks })}>
+          <Button
+            className="w-full"
+            onClick={() =>
+              onSave({ type: "SEND_EMAIL", data: { title, blocks } })
+            }
+          >
             Salva
           </Button>
         </div>

@@ -1,10 +1,4 @@
-type GETProps = {
-  params: {
-    actionId: string;
-  };
-};
-
-export async function GET(req, { params }: GETProps) {
+export async function GET(req, { params }) {
   const { actionId } = req; // Ottieni l'actionId dal parametro dell'URL
 
   const data = await params;

@@ -9,25 +9,18 @@ import { renderBlocks } from "./email-composer";
 import { generateEmailHtml } from "@/utils/export";
 import ComposerWrapper from "./composer/composer-wrapper";
 import { DraggableTypes } from "./draggable-block";
-import { startCampaign, updateCampaignActions } from "@/utils/campaign";
+import { startCampaign } from "@/utils/campaign";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { FaPlay } from "react-icons/fa";
 
 type StartCampaignButtonProps = {
-  projectId: string;
   campaignId: string;
-  actions: any[];
 };
 
-const StartCampaignButton = ({
-  projectId,
-  campaignId,
-  actions,
-}: StartCampaignButtonProps) => {
+const StartCampaignButton = ({ campaignId }: StartCampaignButtonProps) => {
   const router = useRouter();
   const handleSubmit = async () => {
-    const savedCampaign = await updateCampaignActions(campaignId, actions);
     const startedCampaign = await startCampaign(campaignId);
     if (startedCampaign) {
       router.refresh();

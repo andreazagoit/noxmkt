@@ -1,6 +1,6 @@
 "use client";
+import { ACTIONS } from "@/const/actions";
 import { cn } from "@/lib/utils";
-import { updateCampaignActions } from "@/utils/campaign";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FaPlus } from "react-icons/fa6";
@@ -10,9 +10,8 @@ import DeleteCampaignButton from "./delete-campaign-button";
 import GoBackButton from "./go-back-button";
 import OpenEmailEditorButton from "./open-email-editor-button";
 import RefreshPageButton from "./refresh-page-button";
-import StartCampaignButton from "./start-campaign-button";
 import { Button } from "./ui/button";
-import { Card, CardDescription, CardTitle } from "./ui/card";
+import { Card } from "./ui/card";
 import Container from "./ui/container";
 import {
   DropdownMenu,
@@ -22,31 +21,18 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import Nav from "./ui/nav";
-import { ActionTypes } from "@/utils/actions";
+import { addAction } from "@/utils/actions";
+import StartCampaignButton from "./start-campaign-button";
 
 const CampaignActions = ({ projectId, campaign, campaignId }) => {
   const [dialog, setDialog] = useState<undefined | "add_email">();
   const [actions, setActions] = useState([...campaign.actions]);
   const router = useRouter();
 
-  const handleAddEmailAction = (data: any) => {
-    setActions((state) => [...state, { type: "SEND_EMAIL", data }]);
+  const handleAddAction = async (data: any) => {
+    const newAction = await addAction(campaignId, data);
     setDialog(undefined);
-  };
-
-  const handleDeleteAction = (index: number) => {
-    setActions((prevActions) => prevActions.filter((_, i) => i !== index));
-  };
-
-  const handleSaveDraft = async () => {
-    try {
-      await updateCampaignActions(campaignId, actions);
-      toast("Campagna salvata");
-      router.back();
-    } catch (error) {
-      console.error("Error saving draft:", error);
-      alert("Failed to save draft");
-    }
+    router.refresh();
   };
 
   return (
@@ -116,33 +102,21 @@ const CampaignActions = ({ projectId, campaign, campaignId }) => {
           </div>
           <div className="flex flex-col gap-4">
             {actions.map((action, i) => (
-              <div key={i}>
-                {ActionTypes.SEND_EMAIL.actionCard(action, () =>
-                  handleDeleteAction(i)
-                )}
-              </div>
+              <div key={i}>{ACTIONS.SEND_EMAIL.actionCard(action)}</div>
             ))}
           </div>
         </div>
         <Nav className="justify-end md:justify-between">
           <DeleteCampaignButton campaignId={campaignId} />
           <div className="flex gap-4">
-            <Button variant="outline" onClick={handleSaveDraft}>
-              <MdSaveAlt />
-              Salva Draft
-            </Button>
-            <StartCampaignButton
-              projectId={projectId}
-              campaignId={campaignId}
-              actions={actions}
-            />
+            <StartCampaignButton campaignId={campaignId} />
           </div>
         </Nav>
       </Container>
       <OpenEmailEditorButton
         open={dialog === "add_email"}
         onDimiss={() => setDialog(undefined)}
-        onSave={handleAddEmailAction}
+        onSave={handleAddAction}
         projectId={projectId}
       />
     </>
