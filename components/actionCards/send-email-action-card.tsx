@@ -8,15 +8,18 @@ import { countEvent } from "@/utils/event";
 
 const SendEmailActionCard = ({ action }) => {
   const router = useRouter();
-  const [count, setCount] = useState(null);
+  const [sentCount, setSentCount] = useState(null);
+  const [openedCount, setOpenedCount] = useState(null);
 
   useEffect(() => {
-    const fetchCount = async () => {
-      const result = await countEvent(action, "OPENED");
-      setCount(result);
+    const fetchCounts = async () => {
+      const sentResult = await countEvent(action, "SENT");
+      const openedResult = await countEvent(action, "OPENED");
+      setSentCount(sentResult);
+      setOpenedCount(openedResult);
     };
 
-    fetchCount();
+    fetchCounts();
   }, [action]);
 
   return (
@@ -28,7 +31,6 @@ const SendEmailActionCard = ({ action }) => {
           onClick={async () => {
             const deletedAction = await deleteAction(action._id);
             console.log(deletedAction);
-
             router.refresh();
           }}
         >
@@ -39,8 +41,8 @@ const SendEmailActionCard = ({ action }) => {
         <p className="uppercase">{action.data.title}</p>
         <p>{JSON.stringify(action.data)}</p>
         <p>Stato: {action.status}</p>
-        <p>Email inviate: {count}</p>
-        <p>Email aperte: {count}</p>
+        <p>Email inviate: {sentCount}</p>
+        <p>Email aperte: {openedCount}</p>
       </CardDescription>
     </Card>
   );
