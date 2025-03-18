@@ -1,16 +1,10 @@
 import AddContactButton from "@/components/add-contact-button";
-import CodeBox from "@/components/code-box";
 import ContactsTable from "@/components/contacts-table";
-import ProfileSelect from "@/components/profile-select";
-import TestEmailButton from "@/components/test-email-button";
-import { Button } from "@/components/ui/button";
 import Container from "@/components/ui/container";
 import Nav from "@/components/ui/nav";
 import { getContacts } from "@/utils/contact";
 import { getProfiles } from "@/utils/profiles";
 import { getProjectById } from "@/utils/project";
-import Link from "next/link";
-import React from "react";
 
 type AudiencePageProps = {
   params: Promise<{ projectId: string }>;

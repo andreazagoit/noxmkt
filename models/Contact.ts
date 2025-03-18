@@ -1,3 +1,4 @@
+import { hashEmail } from "@/utils/crypto";
 import mongoose from "mongoose";
 
 const contactSchema = new mongoose.Schema(
@@ -18,6 +19,13 @@ const contactSchema = new mongoose.Schema(
     email: {
       type: String,
       required: true,
+    },
+    emailHash: {
+      type: String,
+      required: true,
+      default: function () {
+        return hashEmail(this.email.trim().toLowerCase());
+      },
     },
     phone: {
       type: String,

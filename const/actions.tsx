@@ -1,5 +1,6 @@
 import SendEmailActionCard from "@/components/actionCards/send-email-action-card";
 import { sendSingleEmail } from "@/utils/email";
+import { saveEvent } from "@/utils/event";
 import { generateEmailHtml, renderBlocks } from "@/utils/export";
 
 export const ACTIONS = {
@@ -20,11 +21,15 @@ export const ACTIONS = {
             title: action.data.title,
             text: textContent,
             html: htmlContent,
-            campaignId,
+            actionId: action._id,
           }
         );
 
+        await saveEvent(action._id, campaignId, "SENT", {});
+
         if (result.success) {
+          action.status = "completed";
+          await action.save();
           console.log("Email inviata con successo:", action.data.title);
         } else {
           console.error("Errore durante l'invio dell'email:", result.error);

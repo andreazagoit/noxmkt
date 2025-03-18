@@ -1,21 +1,26 @@
 "use server";
-import { z } from "zod";
-import ContactModel from "@/models/Contact";
-import ProjectModel from "@/models/Project";
 import connectDB from "@/lib/db";
-import { normalizeData } from "./normalizeData";
-import validator from "validator";
+import ContactModel from "@/models/Contact";
 import contactValidator from "@/validators/contact";
+import { z } from "zod";
+import { normalizeData } from "./normalizeData";
 
 export async function getContacts(projectId: string) {
+  await connectDB();
   try {
     const foundContacts = await ContactModel.find({ project: projectId });
+
     console.log(foundContacts);
     return normalizeData(foundContacts) || [];
   } catch (error) {
     console.error("Errore durante l'ottenimento dei contatti", error);
     throw new Error("Errore durante l'ottenimento dei contatti");
   }
+}
+
+export async function getContactByHash(emailHash: string) {
+  await connectDB();
+  return await ContactModel.findOne({ emailHash });
 }
 
 export async function addContact(

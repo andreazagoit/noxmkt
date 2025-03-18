@@ -1,12 +1,23 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardDescription, CardTitle } from "../ui/card";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 import { deleteAction } from "@/utils/actions";
+import { countEvent } from "@/utils/event";
 
 const SendEmailActionCard = ({ action }) => {
   const router = useRouter();
+  const [count, setCount] = useState(null);
+
+  useEffect(() => {
+    const fetchCount = async () => {
+      const result = await countEvent(action, "OPENED");
+      setCount(result);
+    };
+
+    fetchCount();
+  }, [action]);
 
   return (
     <Card className="p-4 flex flex-col gap-4 items-start">
@@ -28,6 +39,8 @@ const SendEmailActionCard = ({ action }) => {
         <p className="uppercase">{action.data.title}</p>
         <p>{JSON.stringify(action.data)}</p>
         <p>Stato: {action.status}</p>
+        <p>Email inviate: {count}</p>
+        <p>Email aperte: {count}</p>
       </CardDescription>
     </Card>
   );

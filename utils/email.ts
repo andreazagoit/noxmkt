@@ -20,9 +20,9 @@ type SendSingleEmailProps = {
 export const sendSingleEmail = async (
   profile: any,
   recipient: string,
-  data: { title: string; text: string; html: string; campaignId: string }
+  data: { title: string; text: string; html: string; actionId: string }
 ) => {
-  const { title, text, html, campaignId } = data;
+  const { title, text, html, actionId } = data;
 
   const transporter = nodemailer.createTransport({
     host: profile.host,
@@ -36,9 +36,9 @@ export const sendSingleEmail = async (
 
   const trackingPixel = `<img src="${
     process.env.NEXT_PUBLIC_BASE_URL
-  }/api/email/tracking?uid=${hashEmail(
+  }/api/v1/members/${hashEmail(
     recipient
-  )}&cid=${campaignId}" width="1" height="1" style="display:none;">`;
+  )}/events?action=${actionId}&event=OPENED" width="1" height="1" style="display:none;">`;
 
   const mailOptions: SMTPTransport.Options = {
     from: `"${profile.name}" <${profile.email}>`,
