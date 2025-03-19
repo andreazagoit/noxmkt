@@ -33,3 +33,14 @@ export const addAction = async (campaignId, actionData) => {
     throw error;
   }
 };
+
+export const getActionById = async (actionId) => {
+  await connectDB();
+  try {
+    const foundAction = await ActionModel.findById(actionId);
+    return normalizeData(foundAction);
+  } catch (error) {
+    console.error("Error adding action:", error);
+    throw error;
+  }
+};

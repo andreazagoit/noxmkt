@@ -1,6 +1,7 @@
 "use server";
 import connectDB from "@/lib/db";
 import ActionModel from "@/models/Action";
+import ContactModel from "@/models/Contact";
 import EventModel from "@/models/Event";
 
 export const saveEvent = async (actionId, contactId, type, data) => {
@@ -32,4 +33,13 @@ export const countEvent = async (action: string, type: "SENT" | "OPENED") => {
   await connectDB();
   const count = await EventModel.countDocuments({ action, type });
   return count;
+};
+
+export const getEvents = async (actionId: string) => {
+  const foundEvents = await EventModel.find().populate(
+    "contact",
+    null,
+    ContactModel
+  );
+  return foundEvents;
 };
